@@ -5,3 +5,4 @@ Makefile.PL
 StackTrace.pm
 test.pl
 Changes
+META.yml                                 Module meta-data (added by MakeMaker)

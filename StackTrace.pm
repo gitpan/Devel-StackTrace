@@ -11,7 +11,7 @@ use overload
     '""' => \&as_string,
     fallback => 1;
 
-$VERSION = '1.03';
+$VERSION = '1.04';
 
 1;
 
@@ -48,8 +48,7 @@ sub _add_frames
 	$p{ignore_class} = [$p{ignore_class}] unless ref $p{ignore_class};
 	%i_class = map {$_ => 1} @{ $p{ignore_class} };
     }
-    # This _will_ cause all subclasses of this class to be ignored as
-    # well.
+
     my $p = __PACKAGE__;
     $i_pack{$p} = 1;
 
@@ -61,36 +60,47 @@ sub _add_frames
 	next if $i_pack{ $c[0] };
 	next if grep { $c[0]->isa($_) } keys %i_class;
 
-	# eval and is_require are only returned when applicable under 5.00503.
-	push @c, (undef, undef) if scalar @c == 6;
-
-	my @a = @DB::args;
-
-        if ( $p{no_refs} )
-        {
-            @a = map { ( ref $_ ?
-                         ( UNIVERSAL::isa( $_, 'Exception::Class::Base' ) ?
-                           do { if ( $_->can('show_trace') )
-                                {
-                                    my $t = $_->show_trace;
-                                    $_->show_trace(0);
-                                    my $s = "$_";
-                                    $_->show_trace($t);
-                                    return $s;
-                                }
-                                else
-                                {
-                                    # hack but should work with older
-                                    # versions of E::C::B
-                                    return $_->{message};
-                                } } :
-                           "$_"
-                         ) :
-                         $_ ) } @a;
-        }
-
-	push @{ $self->{frames} }, Devel::StackTraceFrame->new(\@c, \@a);
+        $self->_add_frame( $p{no_refs}, \@c )
+            if @c;
     }
+}
+
+sub _add_frame
+{
+    my $self = shift;
+    my $no_refs = shift;
+    my $c = shift;
+
+    # eval and is_require are only returned when applicable under 5.00503.
+    push @$c, (undef, undef) if scalar @$c == 6;
+
+    my @a = @DB::args;
+
+    if ( $no_refs )
+    {
+        @a = map { ( ref $_
+                     ? ( UNIVERSAL::isa( $_, 'Exception::Class::Base' ) ?
+                         do { if ( $_->can('show_trace') )
+                              {
+                                  my $t = $_->show_trace;
+                                  $_->show_trace(0);
+                                  my $s = "$_";
+                                  $_->show_trace($t);
+                                  $s;
+                              }
+                              else
+                              {
+                                  # hack but should work with older
+                                  # versions of E::C::B
+                                  $_->{message};
+                              } }
+                         : "$_"
+                       )
+                     : $_
+                   ) } @a;
+    }
+
+    push @{ $self->{frames} }, Devel::StackTraceFrame->new( $c, \@a );
 }
 
 sub next_frame
@@ -275,7 +285,7 @@ sub as_string
 		# 'quote' arg unless it looks like a number
 		$_ = "'$_'" unless /^-?[\d.]+$/;
 
-		# print high-end chars as 'M-<char>' or '^<char>'
+		# print control/high ASCII chars as 'M-<char>' or '^<char>'
 		s/([\200-\377])/sprintf("M-%c",ord($1)&0177)/eg;
 		s/([\0-\37\177])/sprintf("^%c",ord($1)^64)/eg;
 	    }
