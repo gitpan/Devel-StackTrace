@@ -1,6 +1,6 @@
 --- #YAML:1.0
 name: Devel-StackTrace
-version: 1.09
+version: 1.10
 author:
   - Dave Rolsky, <autarch@urth.org>
 abstract: Stack trace and stack trace frame objects
@@ -10,8 +10,8 @@ requires:
 provides:
   Devel::StackTrace:
     file: lib/Devel/StackTrace.pm
-    version: 1.09
+    version: 1.10
   Devel::StackTraceFrame:
     file: lib/Devel/StackTrace.pm
-    version: 1.09
+    version: 1.10
 generated_by: Module::Build version 0.23
