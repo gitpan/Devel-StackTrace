@@ -11,7 +11,7 @@ use overload
     '""' => \&as_string,
     fallback => 1;
 
-$VERSION = '1.00';
+$VERSION = '1.01';
 
 1;
 
@@ -33,6 +33,8 @@ sub _add_frames
 {
     my $self = shift;
     my %p = @_;
+
+    $p{no_refs} = delete $p{no_object_refs} if exists $p{no_object_refs};
 
     my (%i_pack, %i_class);
     if ($p{ignore_package})
@@ -64,14 +66,9 @@ sub _add_frames
 
 	my @a = @DB::args;
 
-        if ( $p{no_object_refs} )
+        if ( $p{no_refs} )
         {
-            # All objects inherit from UNIVERSAL.  Plain references
-            # don't.
-            @a =
-                map { UNIVERSAL::isa( $_, 'UNIVERSAL' ) ?
-                      (ref $_) . ' object (D::V)' :
-                      $_ } @a;
+            @a = map { ref $_ ? "$_" : $_ } @a;
         }
 
 	push @{ $self->{frames} }, Devel::StackTraceFrame->new(\@c, \@a);
@@ -362,19 +359,14 @@ parameter, meaning that the Devel::StackTrace package is B<ALWAYS>
 ignored.  However, if you create a subclass of Devel::StackTrace it
 will not be ignored.
 
-=item -- no_object_refs => $boolean
+=item -- no_refs => $boolean
 
 If this parameter is true, then Devel::StackTrace will not store
-objects internally when generataing stacktrace frames.  This lets your
-objects go out of scope.
+references internally when generating stacktrace frames.  This lets
+your objects go out of scope.
 
-Devel::StackTrace replaces any objects arguments with a string like
-this:
-
-  (ref $object) . ' object (D::V)'
-
-So an object of the C<Widget> class would be represented as "Widget
-object (D::V)".
+Devel::StackTrace replaces any references with their stringified
+representation.
 
 =item * next_frame
 

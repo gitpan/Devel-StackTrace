@@ -1,6 +1,7 @@
 use ExtUtils::MakeMaker;
-
-WriteMakefile( NAME         => 'Devel::StackTrace',
-               VERSION_FROM => 'StackTrace.pm', # finds $VERSION
-               PREREQ_PM    => { 'Test::More' => 0.46 },
-             );
+# See lib/ExtUtils/MakeMaker.pm for details of how to influence
+# the contents of the Makefile that is written.
+WriteMakefile(
+    'NAME'	=> 'Devel::StackTrace',
+    'VERSION_FROM' => 'StackTrace.pm', # finds $VERSION
+);
