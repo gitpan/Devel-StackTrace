@@ -1,3 +1,9 @@
+1.07  Feb 21, 2004
+
+- This release includes a change to the overload handling that is
+necessary for cooperation with Exception::Class.
+
+
 1.06  Feb 21, 2004
 
 - Devel::StackTrace now uses overload::StrVal() to get the underlying

@@ -11,7 +11,7 @@ use overload
     '""' => \&as_string,
     fallback => 1;
 
-$VERSION = '1.06';
+$VERSION = '1.07';
 
 1;
 
@@ -96,7 +96,7 @@ sub _add_frame
                                   # versions of E::C::B
                                   $_->{message};
                               } }
-                         : "$_"
+                         : $self->_ref_as_string($_)
                        )
                      : $_
                    ) } @a;
@@ -104,6 +104,25 @@ sub _add_frame
 
     push @{ $self->{frames} },
         Devel::StackTraceFrame->new( $c, \@a, $self->{respect_overload} );
+}
+
+sub _ref_as_string
+{
+    my $self = shift;
+
+    if ( ref $_[0] &&
+         ! $self->{respect_overload} &&
+         require overload &&
+         overload::Overloaded($_[0])
+       )
+    {
+        return overload::StrVal($_[0]);
+    }
+    else
+    {
+        # force stringification
+        $_[0] . '';
+    }
 }
 
 sub next_frame
@@ -282,19 +301,8 @@ sub as_string
 		# set args to the string "undef" if undefined
 		$_ = "undef", next unless defined $_;
 
-                if ( ref $_ &&
-                     ! $self->{respect_overload} &&
-                     require overload &&
-                     overload::Overloaded($_)
-                   )
-                {
-                    $_ = overload::StrVal($_);
-                }
-                else
-                {
-                    # force stringification
-                    $_ .= '';
-                }
+                # hack!
+                $_ = $self->Devel::StackTrace::_ref_as_string($_);
 
 		s/'/\\'/g;
 
