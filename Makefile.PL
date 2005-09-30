@@ -5,9 +5,11 @@ WriteMakefile
           'NAME' => 'Devel::StackTrace',
           'VERSION_FROM' => 'lib/Devel/StackTrace.pm',
           'PREREQ_PM' => {
+                           'File::Spec' => '0',
                            'Test::More' => '0.46'
                          },
           'INSTALLDIRS' => 'site',
+          'EXE_FILES' => [],
           'PL_FILES' => {}
         )
 ;
