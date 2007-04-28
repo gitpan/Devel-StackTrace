@@ -1,5 +1,5 @@
 This file contains message digests of all files listed in MANIFEST,
-signed via the Module::Signature module, version 0.54.
+signed via the Module::Signature module, version 0.55.
 
 To verify the content in this distribution, first make sure you have
 Module::Signature installed, then type:
@@ -15,19 +15,20 @@ not run its Makefile.PL or Build.PL.
 Hash: SHA1
 
 SHA1 986e82f731b15a790055de66321db395d10c56f9 Build.PL
-SHA1 4420ce735b40e014851862174bac6aa5d3e677b5 Changes
+SHA1 ac24ee7b985032e25958e1623622c6eda3ed7e85 Changes
 SHA1 f235ba4160673bcb7c9d58c2f09dbc7fc0efadea LICENSE
-SHA1 e326a2691dd8db15d06f130afaaf41fa2c673822 MANIFEST
-SHA1 7a6b05b94dd83aaa157e60eba784c61544710a26 META.yml
+SHA1 6d7a202ff824d6483c24b6b4025c2a01cd414521 MANIFEST
+SHA1 289521e4e77a74d3674fc19a2ea62ae7aec257a1 META.yml
 SHA1 c3d9c0c03faad299fd07bf46c48f7ad0edc204a1 Makefile.PL
 SHA1 1140b1d8c68fe79b8797fc23a0b0e01a3f9a3cb9 README
-SHA1 d5590a86adef982dcdc1ee7fbf6c05a1734c2123 lib/Devel/StackTrace.pm
+SHA1 8466d4442a5d4693a920b3a4e64189504c57194c lib/Devel/StackTrace.pm
 SHA1 9793483d52fc1dcc58ff91161b0df760168830f3 t/01-basic.t
-SHA1 157c4c93c5a1b2325a244c54aa71f790b7addbe5 t/99-pod.t
+SHA1 f8678ba1c55d529f059c01a939bb03a1093f4137 t/pod-coverage.t
+SHA1 157c4c93c5a1b2325a244c54aa71f790b7addbe5 t/pod.t
 -----BEGIN PGP SIGNATURE-----
-Version: GnuPG v1.4.3 (GNU/Linux)
+Version: GnuPG v1.4.6 (GNU/Linux)
 
-iD8DBQFF+reQ3Or3ZzQuifMRAseHAKCd+qit1zLM+q5dUuFxQBHJyUxmCwCfUdO4
-mfSemg7leXV3AKa0E6IAbJg=
-=4RF/
+iD8DBQFGM6lH3Or3ZzQuifMRAinpAKCwOiFjrOfuvRrnlMF/cOQpm6y6YQCgqlEM
+1sq4LgtTpYJyqmqbpcrySMg=
+=BrmZ
 -----END PGP SIGNATURE-----
