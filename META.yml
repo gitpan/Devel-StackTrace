@@ -1,6 +1,6 @@
 ---
 name: Devel-StackTrace
-version: 1.15
+version: 1.16
 author:
   - 'Dave Rolsky, <autarch@urth.org>'
 abstract: Stack trace and stack trace frame objects
@@ -13,11 +13,11 @@ requires:
 provides:
   Devel::StackTrace:
     file: lib/Devel/StackTrace.pm
-    version: 1.15
+    version: 1.16
   Devel::StackTraceFrame:
     file: lib/Devel/StackTrace.pm
     version: 0.6
-generated_by: Module::Build version 0.2807
+generated_by: Module::Build version 0.2808
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.2.html
   version: 1.2
