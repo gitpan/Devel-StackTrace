@@ -28,8 +28,7 @@ DESCRIPTION
 
     The Devel::StackTrace object contains a set of Devel::StackTraceFrame
     objects, one for each level of the stack. The frames contain all the
-    data available from caller() as of Perl 5.6.0 though this module still
-    works with 5.00503.
+    data available from "caller()".
 
     This code was created to support my Exception::Class::Base class (part
     of Exception::Class) but may be useful in other contexts.
@@ -172,7 +171,6 @@ Devel::StackTraceFrame METHODS
         Returns the arguments passed to the frame. Note that any arguments
         that are references are returned as references, not copies.
 
-  These only contain data as of Perl 5.6.0 or later
     *   $frame->hints
 
     *   $frame->bitmask
