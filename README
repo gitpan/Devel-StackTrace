@@ -54,16 +54,19 @@ DESCRIPTION
       }
 
 Devel::StackTrace METHODS
-    * Devel::StackTrace->new(%named_params)
+    *   Devel::StackTrace->new(%named_params)
+
         Returns a new Devel::StackTrace object.
 
         Takes the following parameters:
 
-        * ignore_package => $package_name OR \@package_names
+        *       ignore_package => $package_name OR \@package_names
+
                 Any frames where the package is one of these packages will
                 not be on the stack.
 
-        * ignore_class => $package_name OR \@package_names
+        *       ignore_class => $package_name OR \@package_names
+
                 Any frames where the package is a subclass of one of these
                 packages (or is the same package) will not be on the stack.
 
@@ -73,7 +76,8 @@ Devel::StackTrace METHODS
                 create a subclass of Devel::StackTrace it will not be
                 ignored.
 
-        * no_refs => $boolean
+        *       no_refs => $boolean
+
                 If this parameter is true, then Devel::StackTrace will not
                 store references internally when generating stacktrace
                 frames. This lets your objects go out of scope.
@@ -81,7 +85,8 @@ Devel::StackTrace METHODS
                 Devel::StackTrace replaces any references with their
                 stringified representation.
 
-        * respect_overload => $boolean
+        *       respect_overload => $boolean
+
                 By default, Devel::StackTrace will call "overload::StrVal()"
                 to get the underlying string representation of an object,
                 instead of respecting the object's stringification
@@ -89,44 +94,52 @@ Devel::StackTrace METHODS
                 representation of objects in stack traces, then set this
                 parameter to true.
 
-        * max_arg_length => $integer
+        *       max_arg_length => $integer
+
                 By default, Devel::StackTrace will display the entire
                 argument for each subroutine call. Setting this parameter
                 causes it to truncate the argument's string representation
                 if it is longer than this number of characters.
 
-    * $trace->next_frame
+    *   $trace->next_frame
+
         Returns the next Devel::StackTraceFrame object down on the stack. If
         it hasn't been called before it returns the first frame. It returns
         undef when it reaches the bottom of the stack and then resets its
         pointer so the next call to "next_frame" or "prev_frame" will work
         properly.
 
-    * $trace->prev_frame
+    *   $trace->prev_frame
+
         Returns the next Devel::StackTraceFrame object up on the stack. If
         it hasn't been called before it returns the last frame. It returns
         undef when it reaches the top of the stack and then resets its
         pointer so pointer so the next call to "next_frame" or "prev_frame"
         will work properly.
 
-    * $trace->reset_pointer
+    *   $trace->reset_pointer
+
         Resets the pointer so that the next call "next_frame" or
         "prev_frame" will start at the top or bottom of the stack, as
         appropriate.
 
-    * $trace->frames
+    *   $trace->frames
+
         Returns a list of Devel::StackTraceFrame objects. The order they are
         returned is from top (most recent) to bottom.
 
-    * $trace->frame ($index)
+    *   $trace->frame ($index)
+
         Given an index, returns the relevant frame or undef if there is not
         frame at that index. The index is exactly like a Perl array. The
         first frame is 0 and negative indexes are allowed.
 
-    * $trace->frame_count
+    *   $trace->frame_count
+
         Returns the number of frames in the trace object.
 
-    * $trace->as_string
+    *   $trace->as_string
+
         Calls as_string on each frame from top to bottom, producing output
         quite similar to the Carp module's cluck/confess methods.
 
@@ -134,25 +147,35 @@ Devel::StackTraceFrame METHODS
     See the caller documentation for more information on what these methods
     return.
 
-    * $frame->package
-    * $frame->filename
-    * $frame->line
-    * $frame->subroutine
-    * $frame->hasargs
-    * $frame->wantarray
-    * $frame->evaltext
+    *   $frame->package
+
+    *   $frame->filename
+
+    *   $frame->line
+
+    *   $frame->subroutine
+
+    *   $frame->hasargs
+
+    *   $frame->wantarray
+
+    *   $frame->evaltext
+
         Returns undef if the frame was not part of an eval.
 
-    * $frame->is_require
+    *   $frame->is_require
+
         Returns undef if the frame was not part of a require.
 
-    * $frame->args
+    *   $frame->args
+
         Returns the arguments passed to the frame. Note that any arguments
         that are references are returned as references, not copies.
 
   These only contain data as of Perl 5.6.0 or later
-    * $frame->hints
-    * $frame->bitmask
+    *   $frame->hints
+
+    *   $frame->bitmask
 
 SUPPORT
     Please submit bugs to the CPAN RT system at
