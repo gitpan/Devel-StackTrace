@@ -12,7 +12,7 @@ use overload
     '""' => \&as_string,
     fallback => 1;
 
-our $VERSION = '1.20';
+our $VERSION = '1.21';
 
 
 sub new
@@ -68,8 +68,13 @@ sub _ref_to_string
         if blessed $ref && $ref->isa('Exception::Class::Base');
 
     return overload::StrVal($ref) unless $self->{respect_overload};
-    # force stringification and let overloading do its thing
-    return $ref . '';
+
+    local $@;
+    local $SIG{__DIE__};
+
+    my $str = eval { $ref . '' };
+
+    return $@ ? overload::StrVal($ref) : $str;
 }
 
 sub _ecb_hack
@@ -99,6 +104,22 @@ sub _make_frames
 {
     my $self = shift;
 
+    my $filter = $self->_make_frame_filter;
+
+    my $raw = delete $self->{raw};
+    for my $r ( @{$raw} )
+    {
+        next unless $filter->($r);
+
+        $self->_add_frame( $r->{caller}, $r->{args} );
+    }
+}
+
+my $default_filter = sub { 1 };
+sub _make_frame_filter
+{
+    my $self = shift;
+
     my (@i_pack_re, %i_class);
     if ( $self->{ignore_package} )
     {
@@ -108,23 +129,29 @@ sub _make_frames
         @i_pack_re = map { ref $_ ? $_ : qr/^\Q$_\E$/ } @{ $self->{ignore_package} };
     }
 
+    my $p = __PACKAGE__;
+    push @i_pack_re, qr/^\Q$p\E$/;
+
     if ( $self->{ignore_class} )
     {
         $self->{ignore_class} = [ $self->{ignore_class} ] unless ref $self->{ignore_class};
         %i_class = map {$_ => 1} @{ $self->{ignore_class} };
     }
 
-    my $p = __PACKAGE__;
-    push @i_pack_re, qr/^\Q$p\E$/;
+    my $user_filter = $self->{frame_filter};
 
-    my $raw = delete $self->{raw};
-    for my $r ( @{$raw} )
+    return sub
     {
-        next if grep { $r->{caller}[0] =~ /$_/ } @i_pack_re;
-        next if grep { $r->{caller}[0]->isa($_) } keys %i_class;
+        return 0 if grep { $_[0]{caller}[0] =~ /$_/ } @i_pack_re;
+        return 0 if grep { $_[0]{caller}[0]->isa($_) } keys %i_class;
 
-        $self->_add_frame( $r->{caller}, $r->{args} );
-    }
+        if ( $user_filter )
+        {
+            return $user_filter->( $_[0] );
+        }
+
+        return 1;
+    };
 }
 
 sub _add_frame
@@ -444,6 +471,23 @@ Returns a new Devel::StackTrace object.
 Takes the following parameters:
 
 =over 8
+
+=item * frame_filter => $sub
+
+By default, Devel::StackTrace will include all stack frames before the
+call to its its constructor.
+
+However, you may want to filter out some frames with more granularity
+than 'ignore_package' or 'ignore_class' allow.
+
+You can provide a subroutine which is called with the raw frame data
+for each frame. This is a hash reference with two keys, "caller", and
+"args", both of which are array references. The "caller" key is the
+raw data as returned by Perl's C<caller()> function, and the "args"
+key are the subroutine arguments found in C<@DB::args>.
+
+The filter should return true if the frame should be included, or
+false if it should be skipped.
 
 =item * ignore_package => $package_name OR \@package_names
 

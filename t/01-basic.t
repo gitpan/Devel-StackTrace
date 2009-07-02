@@ -1,17 +1,16 @@
 use strict;
 use warnings;
 
+use Devel::StackTrace;
 use Test::More;
 
 BEGIN
 {
-    my $tests = 37;
+    my $tests = 40;
     eval { require Exception::Class };
     $tests++ if ! $@ && $Exception::Class::VERSION >= 1.09;
 
     plan tests => $tests;
-
-    use_ok('Devel::StackTrace');
 }
 
 sub get_file_name { File::Spec->canonpath( (caller(0))[1] ) }
@@ -54,7 +53,7 @@ my $test_file_name = get_file_name();
 Trace begun at $test_file_name line 1012
 main::baz(1, 2) called at $test_file_name line 1007
 main::bar(1) called at $test_file_name line 1002
-main::foo at $test_file_name line 22
+main::foo at $test_file_name line 21
 EOF
 
     is( $trace->as_string, $trace_text, 'trace text' );
@@ -92,7 +91,7 @@ EOF
 
     my $trace_text = <<"EOF";
 Trace begun at $test_file_name line 1012
-main::baz at $test_file_name line 91
+main::baz at $test_file_name line 90
 EOF
 
     my $t = "$trace";
@@ -262,7 +261,7 @@ if ( $Exception::Class::VERSION && $Exception::Class::VERSION >= 1.09 )
 
     my $trace_text = <<"EOF";
 Trace begun at $test_file_name line 1027
-main::max_arg_length('abcdefghij...') called at $test_file_name line 261
+main::max_arg_length('abcdefghij...') called at $test_file_name line 260
 EOF
 
     is( $trace->as_string, $trace_text, 'trace text' );
@@ -289,6 +288,23 @@ SKIP:
 
     is( $trace->{raw}[1]{args}[1], 'not a ref',
         'non-refs are preserved properly in raw data as well' );
+}
+
+{
+    my $trace = overload_no_stringify( CodeOverload->new() );
+
+    eval { $trace->as_string() };
+    is( $@, q{},
+        'no error when respect_overload is true and object overloads but does not stringify' );
+}
+
+{
+    my $trace = Filter::foo();
+
+    my @frames = $trace->frames();
+    is( scalar @frames, 2, 'filtered trace has just 2 frames' );
+    is( $frames[0]->subroutine(), 'Devel::StackTrace::new', 'first subroutine' );
+    is( $frames[1]->subroutine(), 'Filter::bar', 'second subroutine (skipped Filter::foo)' );
 }
 
 # This means I can move these lines down without constantly fiddling
@@ -324,6 +340,12 @@ sub max_arg_length
 {
     Devel::StackTrace->new( max_arg_length => 10 );
 }
+
+sub overload_no_stringify
+{
+    return Devel::StackTrace->new( no_refs => 1, respect_overload => 1 );
+}
+
 
 package Test;
 
@@ -413,4 +435,26 @@ sub new
 sub trace
 {
     Devel::StackTrace->new( no_refs => 1 );
+}
+
+package CodeOverload;
+
+use overload '&{}' => sub { 'foo' };
+
+sub new
+{
+    my $class = shift;
+    return bless {}, $class;
+}
+
+package Filter;
+
+sub foo
+{
+    bar();
+}
+
+sub bar
+{
+    return Devel::StackTrace->new( frame_filter => sub { $_[0]{caller}[3] ne 'Filter::foo' } );
 }
