@@ -98,12 +98,12 @@ Devel::StackTrace METHODS
                 stringified representation.
 
         * respect_overload => $boolean
-                By default, Devel::StackTrace will call `overload::StrVal()'
-                to get the underlying string representation of an object,
-                instead of respecting the object's stringification
-                overloading. If you would prefer to see the overloaded
-                representation of objects in stack traces, then set this
-                parameter to true.
+                By default, Devel::StackTrace will call
+                `overload::AddrRef()' to get the underlying string
+                representation of an object, instead of respecting the
+                object's stringification overloading. If you would prefer to
+                see the overloaded representation of objects in stack
+                traces, then set this parameter to true.
 
         * max_arg_length => $integer
                 By default, Devel::StackTrace will display the entire

@@ -12,7 +12,7 @@ use overload
     '""' => \&as_string,
     fallback => 1;
 
-our $VERSION = '1.21';
+our $VERSION = '1.22';
 
 
 sub new
@@ -48,7 +48,8 @@ sub _record_caller_data
     {
         my @a = @DB::args;
 
-        if ( $self->{no_refs} ) {
+        if ( $self->{no_refs} )
+        {
             @a = map { ref $_ ? $self->_ref_to_string($_) : $_ } @a;
         }
 
@@ -64,40 +65,17 @@ sub _ref_to_string
     my $self = shift;
     my $ref  = shift;
 
-    return overload::StrVal($ref)
+    return overload::AddrRef($ref)
         if blessed $ref && $ref->isa('Exception::Class::Base');
 
-    return overload::StrVal($ref) unless $self->{respect_overload};
+    return overload::AddrRef($ref) unless $self->{respect_overload};
 
     local $@;
     local $SIG{__DIE__};
 
     my $str = eval { $ref . '' };
 
-    return $@ ? overload::StrVal($ref) : $str;
-}
-
-sub _ecb_hack
-{
-    my $self = shift;
-    my $ref  = shift;
-
-    # This avoids a loop between Exception::Class::Base and this module
-    if ( $ref->can('show_trace') )
-    {
-        my $t = $ref->show_trace;
-        $ref->show_trace(0);
-        my $s = "$ref";
-        $ref->show_trace($t);
-
-        return $s;
-    }
-    else
-    {
-        # hack but should work with older
-        # versions of E::C::B
-        return $ref->{message};
-    }
+    return $@ ? overload::AddrRef($ref) : $str;
 }
 
 sub _make_frames
@@ -515,7 +493,7 @@ representation.
 
 =item * respect_overload => $boolean
 
-By default, Devel::StackTrace will call C<overload::StrVal()> to get
+By default, Devel::StackTrace will call C<overload::AddrRef()> to get
 the underlying string representation of an object, instead of
 respecting the object's stringification overloading.  If you would
 prefer to see the overloaded representation of objects in stack
