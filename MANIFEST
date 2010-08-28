@@ -1,15 +1,21 @@
-.shipit
-Build.PL
 Changes
-lib/Devel/StackTrace.pm
+INSTALL
 LICENSE
-Makefile.PL
-MANIFEST			This list of files
+MANIFEST
+META.json
 META.yml
+Makefile.PL
 README
+SIGNATURE
+dist.ini
+lib/Devel/StackTrace.pm
 t/01-basic.t
 t/02-bad-utf8.t
-t/kwalitee.t
-t/pod-coverage.t
-t/pod.t
-SIGNATURE    Added here by Module::Build
+t/03-message.t
+t/04-indent.t
+t/release-eol.t
+t/release-kwalitee.t
+t/release-no-tabs.t
+t/release-pod-coverage.t
+t/release-pod-spell.t
+t/release-pod.t

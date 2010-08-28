@@ -1,5 +1,5 @@
 This file contains message digests of all files listed in MANIFEST,
-signed via the Module::Signature module, version 0.55.
+signed via the Module::Signature module, version 0.61.
 
 To verify the content in this distribution, first make sure you have
 Module::Signature installed, then type:
@@ -14,24 +14,30 @@ not run its Makefile.PL or Build.PL.
 -----BEGIN PGP SIGNED MESSAGE-----
 Hash: SHA1
 
-SHA1 7afddfc9acf24c266120ef5c2f7bd386d2d3901d .shipit
-SHA1 e35fb27b937280dc6e1b2f441a59e47b68faa1d1 Build.PL
-SHA1 166dde560dfac683c03b92f1721d66aa2835f759 Changes
-SHA1 f235ba4160673bcb7c9d58c2f09dbc7fc0efadea LICENSE
-SHA1 9ed43409974a8b931e0e34af209d4f99ccc68d50 MANIFEST
-SHA1 21f21aeac63758b65b1b4368159fad8c745ba733 META.yml
-SHA1 4b62edd5403cd0d20d55e30c37f9ab66b7c16255 Makefile.PL
-SHA1 e2d1e672cbe0736f2ba875a710470db4966008bb README
-SHA1 6153512764fc37df958567ca10ab43962b1667b6 lib/Devel/StackTrace.pm
-SHA1 541a8627e32d01a0a395fd70a0cfad4f5163064f t/01-basic.t
-SHA1 21a1538da8dbde54af7a1708fa2470dd74fe67fc t/02-bad-utf8.t
-SHA1 9ade2293d6e5ea77d94532132c89cd205ea85ed7 t/kwalitee.t
-SHA1 28a931f3b0c075d8d6c4ce47d5e89c3fdb19ed0f t/pod-coverage.t
-SHA1 cec881e89926d320475f9de2b7fad02c2169f510 t/pod.t
+SHA1 f98412ca6076021d551c6544d9c6854d99148b97 Changes
+SHA1 b126cdc313e3c5525664e98cbc68439902ca7bdf INSTALL
+SHA1 23c628b4a8a36738405ccdacaeb912d2e727b4c0 LICENSE
+SHA1 0ee3e11dddbd36a778c309ee99b07d913b7a9811 MANIFEST
+SHA1 aa0699975bfeab8333d212a719025343715bcbfb META.json
+SHA1 1b82d28b77833b218c044902a3d19c5c302556b4 META.yml
+SHA1 19430b3628d458d5532adfccc951cc2206633496 Makefile.PL
+SHA1 c5ea1788b2df42ca9c98b64ab2ef1dcb24ba4cd0 README
+SHA1 73234402ce1c3a90f163875eaaf0ce5f4c390a22 dist.ini
+SHA1 817be30c7653888c3a5b35c27ddacc281484ea2c lib/Devel/StackTrace.pm
+SHA1 875540ef386ca182ff959be0c9bf441692786169 t/01-basic.t
+SHA1 9070c7a3d470b3648a017563c731b657ea8f0143 t/02-bad-utf8.t
+SHA1 afa39934e2b6e665cd2994663273af9a477e52b8 t/03-message.t
+SHA1 e3b74665df972492c41a5fc6ea193a8b863584d4 t/04-indent.t
+SHA1 24b525e3c18f37f8022a01ec30de757cefb679ff t/release-eol.t
+SHA1 961a1e2c92d836c8cad2d34b784cbc75345dec63 t/release-kwalitee.t
+SHA1 455d1dd1867212a665ad5ea4126b572411de300c t/release-no-tabs.t
+SHA1 759101601303ec40f3ef379d607ff030a1a5c026 t/release-pod-coverage.t
+SHA1 638a586fa778f89fffe0cf6ccabc5343f56850f0 t/release-pod-spell.t
+SHA1 72f0bea522bc8d101417864fcdacb537474f78bd t/release-pod.t
 -----BEGIN PGP SIGNATURE-----
-Version: GnuPG v1.4.9 (GNU/Linux)
+Version: GnuPG v1.4.10 (GNU/Linux)
 
-iEYEARECAAYFAkpeMyQACgkQIgMCsV8qvRLunwCfcYaGRVtuZc28Wmc0dd20ZxWc
-xeMAoI2le7W01yd2CndGOkMfHM/+KDNf
-=MI7n
+iEYEARECAAYFAkx4am4ACgkQIgMCsV8qvRLBdgCgiF96VxMfqlbZwapRuqabojRP
+7hIAnA3ZJ3RHuAZ5iOHm/5/BjAzp77Bw
+=AloI
 -----END PGP SIGNATURE-----
