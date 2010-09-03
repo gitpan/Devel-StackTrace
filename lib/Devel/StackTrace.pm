@@ -1,10 +1,14 @@
 package Devel::StackTrace;
+BEGIN {
+  $Devel::StackTrace::VERSION = '1.24';
+}
 
 use 5.006;
 
 use strict;
 use warnings;
 
+use Devel::StackTrace::Frame;
 use File::Spec;
 use Scalar::Util qw( blessed );
 
@@ -40,7 +44,11 @@ sub _record_caller_data {
     my $x = 1;
     while (
         my @c
-        = do { package DB; @DB::args = (); caller( $x++ ) }
+        = do { package # the newline keeps dzil from adding a version here
+                   DB;
+BEGIN {
+  $DB::VERSION = '1.24';
+} @DB::args = (); caller( $x++ ) }
         ) {
         my @args = @DB::args;
 
@@ -134,7 +142,7 @@ sub _add_frame {
     }
 
     push @{ $self->{frames} },
-        Devel::StackTraceFrame->new(
+        Devel::StackTrace::Frame->new(
         $c,
         $args,
         $self->{respect_overload},
@@ -219,146 +227,16 @@ sub as_string {
     return $st;
 }
 
-# Hide from PAUSE
-package Devel::StackTraceFrame;
-
-use strict;
-use warnings;
-
-our $VERSION = $Devel::StackTrace::VERSION;
-
-# Create accessor routines
-BEGIN {
-    no strict 'refs';
-    foreach my $f (
-        qw( package filename line subroutine hasargs
-        wantarray evaltext is_require hints bitmask args )
-        ) {
-        next if $f eq 'args';
-        *{$f} = sub { my $s = shift; return $s->{$f} };
-    }
-}
-
 {
-    my @fields = (
-        qw( package filename line subroutine hasargs wantarray
-            evaltext is_require hints bitmask )
-    );
+    package
+        Devel::StackTraceFrame;
 
-    sub new {
-        my $proto = shift;
-        my $class = ref $proto || $proto;
-
-        my $self = bless {}, $class;
-
-        @{$self}{@fields} = @{ shift() };
-
-        # fixup unix-style paths on win32
-        $self->{filename} = File::Spec->canonpath( $self->{filename} );
-
-        $self->{args} = shift;
-
-        $self->{respect_overload} = shift;
-
-        $self->{max_arg_length} = shift;
-
-        $self->{message} = shift;
-
-        $self->{indent} = shift;
-
-        return $self;
-    }
-}
-
-sub args {
-    my $self = shift;
-
-    return @{ $self->{args} };
-}
-
-sub as_string {
-    my $self  = shift;
-    my $first = shift;
-
-    my $sub = $self->subroutine;
-
-    # This code stolen straight from Carp.pm and then tweaked.  All
-    # errors are probably my fault  -dave
-    if ($first) {
-        $sub
-            = defined $self->{message}
-            ? $self->{message}
-            : 'Trace begun';
-    }
-    else {
-
-        # Build a string, $sub, which names the sub-routine called.
-        # This may also be "require ...", "eval '...' or "eval {...}"
-        if ( my $eval = $self->evaltext ) {
-            if ( $self->is_require ) {
-                $sub = "require $eval";
-            }
-            else {
-                $eval =~ s/([\\\'])/\\$1/g;
-                $sub = "eval '$eval'";
-            }
-        }
-        elsif ( $sub eq '(eval)' ) {
-            $sub = 'eval {...}';
-        }
-
-        # if there are any arguments in the sub-routine call, format
-        # them according to the format variables defined earlier in
-        # this file and join them onto the $sub sub-routine string
-        #
-        # We copy them because they're going to be modified.
-        #
-        if ( my @a = $self->args ) {
-            for (@a) {
-
-                # set args to the string "undef" if undefined
-                $_ = "undef", next unless defined $_;
-
-                # hack!
-                $_ = $self->Devel::StackTrace::_ref_to_string($_)
-                    if ref $_;
-
-                eval {
-                    if ( $self->{max_arg_length}
-                        && length $_ > $self->{max_arg_length} ) {
-                        substr( $_, $self->{max_arg_length} ) = '...';
-                    }
-
-                    s/'/\\'/g;
-
-                    # 'quote' arg unless it looks like a number
-                    $_ = "'$_'" unless /^-?[\d.]+$/;
-
-                    # print control/high ASCII chars as 'M-<char>' or '^<char>'
-                    s/([\200-\377])/sprintf("M-%c",ord($1)&0177)/eg;
-                    s/([\0-\37\177])/sprintf("^%c",ord($1)^64)/eg;
-                };
-
-                if ( my $e = $@ ) {
-                    $_ = $e =~ /malformed utf-8/i ? '(bad utf-8)' : '?';
-                }
-            }
-
-            # append ('all', 'the', 'arguments') to the $sub string
-            $sub .= '(' . join( ', ', @a ) . ')';
-            $sub .= ' called';
-        }
-    }
-
-    # If the user opted into indentation (a la Carp::confess), pre-add a tab
-    my $tab = $self->{indent} && !$first ? "\t" : q{};
-
-    return "${tab}$sub at " . $self->filename . ' line ' . $self->line;
+    our @ISA = 'Devel::StackTrace';
 }
 
 1;
 
-# ABSTRACT: Stack trace and stack trace frame objects
+# ABSTRACT: An object representing a stack trace
 
 
 
@@ -366,11 +244,11 @@ sub as_string {
 
 =head1 NAME
 
-Devel::StackTrace - Stack trace and stack trace frame objects
+Devel::StackTrace - An object representing a stack trace
 
 =head1 VERSION
 
-version 1.23
+version 1.24
 
 =head1 SYNOPSIS
 
@@ -381,25 +259,23 @@ version 1.23
   print $trace->as_string; # like carp
 
   # from top (most recent) of stack to bottom.
-  while (my $frame = $trace->next_frame)
-  {
+  while (my $frame = $trace->next_frame) {
       print "Has args\n" if $frame->hasargs;
   }
 
   # from bottom (least recent) of stack to top.
-  while (my $frame = $trace->prev_frame)
-  {
+  while (my $frame = $trace->prev_frame) {
       print "Sub: ", $frame->subroutine, "\n";
   }
 
 =head1 DESCRIPTION
 
 The Devel::StackTrace module contains two classes, Devel::StackTrace
-and Devel::StackTraceFrame.  The goal of this object is to encapsulate
+and Devel::StackTrace::Frame.  The goal of this object is to encapsulate
 the information that can found through using the caller() function, as
 well as providing a simple interface to this data.
 
-The Devel::StackTrace object contains a set of Devel::StackTraceFrame
+The Devel::StackTrace object contains a set of Devel::StackTrace::Frame
 objects, one for each level of the stack.  The frames contain all the
 data available from C<caller()>.
 
@@ -416,13 +292,11 @@ Here's an example:
 
   foo();  # bottom frame is here
 
-  sub foo
-  {
+  sub foo {
      bar();
   }
 
-  sub bar
-  {
+  sub bar {
      Devel::StackTrace->new;  # top frame is here.
   }
 
@@ -509,7 +383,7 @@ tab character, just like C<Carp::confess()>.
 
 =item * $trace->next_frame
 
-Returns the next Devel::StackTraceFrame object down on the stack.  If
+Returns the next Devel::StackTrace::Frame object down on the stack.  If
 it hasn't been called before it returns the first frame.  It returns
 undef when it reaches the bottom of the stack and then resets its
 pointer so the next call to C<next_frame> or C<prev_frame> will work
@@ -517,7 +391,7 @@ properly.
 
 =item * $trace->prev_frame
 
-Returns the next Devel::StackTraceFrame object up on the stack.  If it
+Returns the next Devel::StackTrace::Frame object up on the stack.  If it
 hasn't been called before it returns the last frame.  It returns undef
 when it reaches the top of the stack and then resets its pointer so
 pointer so the next call to C<next_frame> or C<prev_frame> will work
@@ -531,7 +405,7 @@ appropriate.
 
 =item * $trace->frames
 
-Returns a list of Devel::StackTraceFrame objects.  The order they are
+Returns a list of Devel::StackTrace::Frame objects.  The order they are
 returned is from top (most recent) to bottom.
 
 =item * $trace->frame ($index)
@@ -548,44 +422,6 @@ Returns the number of frames in the trace object.
 
 Calls as_string on each frame from top to bottom, producing output
 quite similar to the Carp module's cluck/confess methods.
-
-=back
-
-=head1 Devel::StackTraceFrame METHODS
-
-See the L<caller> documentation for more information on what these
-methods return.
-
-=over 4
-
-=item * $frame->package
-
-=item * $frame->filename
-
-=item * $frame->line
-
-=item * $frame->subroutine
-
-=item * $frame->hasargs
-
-=item * $frame->wantarray
-
-=item * $frame->evaltext
-
-Returns undef if the frame was not part of an eval.
-
-=item * $frame->is_require
-
-Returns undef if the frame was not part of a require.
-
-=item * $frame->args
-
-Returns the arguments passed to the frame.  Note that any arguments
-that are references are returned as references, not copies.
-
-=item * $frame->hints
-
-=item * $frame->bitmask
 
 =back
 

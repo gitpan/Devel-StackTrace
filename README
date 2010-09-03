@@ -1,9 +1,9 @@
 
 
 This archive contains the distribution Devel-StackTrace,
-version 1.23:
+version 1.24:
 
-  Stack trace and stack trace frame objects
+  An object representing a stack trace
 
 This software is Copyright (c) 2010 by Dave Rolsky.
 

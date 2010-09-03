@@ -9,6 +9,7 @@ README
 SIGNATURE
 dist.ini
 lib/Devel/StackTrace.pm
+lib/Devel/StackTrace/Frame.pm
 t/01-basic.t
 t/02-bad-utf8.t
 t/03-message.t

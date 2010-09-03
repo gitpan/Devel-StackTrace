@@ -9,7 +9,7 @@ use ExtUtils::MakeMaker 6.31;
 
 
 my %WriteMakefileArgs = (
-  'ABSTRACT' => 'Stack trace and stack trace frame objects',
+  'ABSTRACT' => 'An object representing a stack trace',
   'AUTHOR' => 'Dave Rolsky <autarch@urth.org>',
   'BUILD_REQUIRES' => {
     'Test::More' => '0.88'
@@ -25,7 +25,7 @@ my %WriteMakefileArgs = (
     'File::Spec' => '0',
     'Scalar::Util' => '0'
   },
-  'VERSION' => '1.23',
+  'VERSION' => '1.24',
   'test' => {
     'TESTS' => 't/*.t'
   }
