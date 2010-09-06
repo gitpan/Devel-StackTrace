@@ -1,6 +1,6 @@
-package  Devel::StackTrace::Frame;
+package Devel::StackTrace::Frame;
 BEGIN {
-  $Devel::StackTrace::Frame::VERSION = '1.24';
+  $Devel::StackTrace::Frame::VERSION = '1.25';
 }
 
 use strict;
@@ -149,7 +149,7 @@ Devel::StackTrace::Frame - A single frame in a stack trace
 
 =head1 VERSION
 
-version 1.24
+version 1.25
 
 =head1 DESCRIPTION
 

@@ -1,6 +1,6 @@
 package Devel::StackTrace;
 BEGIN {
-  $Devel::StackTrace::VERSION = '1.24';
+  $Devel::StackTrace::VERSION = '1.25';
 }
 
 use 5.006;
@@ -47,7 +47,7 @@ sub _record_caller_data {
         = do { package # the newline keeps dzil from adding a version here
                    DB;
 BEGIN {
-  $DB::VERSION = '1.24';
+  $DB::VERSION = '1.25';
 } @DB::args = (); caller( $x++ ) }
         ) {
         my @args = @DB::args;
@@ -231,7 +231,7 @@ sub as_string {
     package
         Devel::StackTraceFrame;
 
-    our @ISA = 'Devel::StackTrace';
+    our @ISA = 'Devel::StackTrace::Frame';
 }
 
 1;
@@ -248,7 +248,7 @@ Devel::StackTrace - An object representing a stack trace
 
 =head1 VERSION
 
-version 1.24
+version 1.25
 
 =head1 SYNOPSIS
 
