@@ -15,6 +15,7 @@ t/02-bad-utf8.t
 t/03-message.t
 t/04-indent.t
 t/05-back-compat.t
+t/06-dollar-at.t
 t/release-eol.t
 t/release-kwalitee.t
 t/release-no-tabs.t

@@ -1,6 +1,6 @@
 package Devel::StackTrace;
 BEGIN {
-  $Devel::StackTrace::VERSION = '1.25';
+  $Devel::StackTrace::VERSION = '1.26';
 }
 
 use 5.006;
@@ -47,7 +47,7 @@ sub _record_caller_data {
         = do { package # the newline keeps dzil from adding a version here
                    DB;
 BEGIN {
-  $DB::VERSION = '1.25';
+  $DB::VERSION = '1.26';
 } @DB::args = (); caller( $x++ ) }
         ) {
         my @args = @DB::args;
@@ -248,7 +248,7 @@ Devel::StackTrace - An object representing a stack trace
 
 =head1 VERSION
 
-version 1.25
+version 1.26
 
 =head1 SYNOPSIS
 
@@ -433,7 +433,7 @@ or via email at bug-devel-stacktrace@rt.cpan.org.
 
 =head1 AUTHOR
 
-  Dave Rolsky <autarch@urth.org>
+Dave Rolsky <autarch@urth.org>
 
 =head1 COPYRIGHT AND LICENSE
 

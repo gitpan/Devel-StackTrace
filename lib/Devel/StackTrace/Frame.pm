@@ -1,6 +1,6 @@
 package Devel::StackTrace::Frame;
 BEGIN {
-  $Devel::StackTrace::Frame::VERSION = '1.25';
+  $Devel::StackTrace::Frame::VERSION = '1.26';
 }
 
 use strict;
@@ -102,6 +102,9 @@ sub as_string {
                 $_ = $self->Devel::StackTrace::_ref_to_string($_)
                     if ref $_;
 
+                local $SIG{__DIE__};
+                local $@;
+
                 eval {
                     if ( $self->{max_arg_length}
                         && length $_ > $self->{max_arg_length} ) {
@@ -149,7 +152,7 @@ Devel::StackTrace::Frame - A single frame in a stack trace
 
 =head1 VERSION
 
-version 1.25
+version 1.26
 
 =head1 DESCRIPTION
 
@@ -195,7 +198,7 @@ that are references are returned as references, not copies.
 
 =head1 AUTHOR
 
-  Dave Rolsky <autarch@urth.org>
+Dave Rolsky <autarch@urth.org>
 
 =head1 COPYRIGHT AND LICENSE
 
