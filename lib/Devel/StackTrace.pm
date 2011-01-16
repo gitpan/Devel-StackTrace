@@ -1,6 +1,6 @@
 package Devel::StackTrace;
 BEGIN {
-  $Devel::StackTrace::VERSION = '1.26';
+  $Devel::StackTrace::VERSION = '1.27';
 }
 
 use 5.006;
@@ -45,10 +45,7 @@ sub _record_caller_data {
     while (
         my @c
         = do { package # the newline keeps dzil from adding a version here
-                   DB;
-BEGIN {
-  $DB::VERSION = '1.26';
-} @DB::args = (); caller( $x++ ) }
+                   DB; @DB::args = (); caller( $x++ ) }
         ) {
         my @args = @DB::args;
 
@@ -248,7 +245,7 @@ Devel::StackTrace - An object representing a stack trace
 
 =head1 VERSION
 
-version 1.26
+version 1.27
 
 =head1 SYNOPSIS
 
@@ -437,11 +434,11 @@ Dave Rolsky <autarch@urth.org>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is Copyright (c) 2010 by Dave Rolsky.
+This software is Copyright (c) 2011 by Dave Rolsky.
 
 This is free software, licensed under:
 
-  The Artistic License 2.0
+  The Artistic License 2.0 (GPL Compatible)
 
 =cut
 

@@ -1,5 +1,5 @@
 This file contains message digests of all files listed in MANIFEST,
-signed via the Module::Signature module, version 0.61.
+signed via the Module::Signature module, version 0.66.
 
 To verify the content in this distribution, first make sure you have
 Module::Signature installed, then type:
@@ -14,19 +14,19 @@ not run its Makefile.PL or Build.PL.
 -----BEGIN PGP SIGNED MESSAGE-----
 Hash: SHA1
 
-SHA1 0f6c060022970be132aed1d5dd626bfdbda63c52 Changes
+SHA1 2e835deff45989b45b5bc1a1608cdbc674579cd2 Changes
 SHA1 0dd1a5b7ce6d39832f3539c41d34a3b43bf88db6 INSTALL
-SHA1 23c628b4a8a36738405ccdacaeb912d2e727b4c0 LICENSE
+SHA1 c715d20265d2931c7564fc64abfdc4f8ff33e297 LICENSE
 SHA1 efb3ca90f1284a6a1ca2c90c2e8b2e8c3540c181 MANIFEST
-SHA1 1ad41e7e8c4e9987e09f4d8ac7848438c5809a78 META.json
-SHA1 0f2f22c309c13b99baf15e1cf4096e45b371b12f META.yml
-SHA1 b0728b5aa9e34b455207c67548e3b8ebef65d935 Makefile.PL
-SHA1 c52cdc155bd393046de26d2cf781a75d514a9b34 README
-SHA1 19c342b0886398c2dd8ffde6d59aa6b944bb742f dist.ini
-SHA1 316680bfc5a43d6076658e84e884c49f81158176 lib/Devel/StackTrace.pm
-SHA1 b19e909ab7f2eecc43b2131d26f30dd21905ed6c lib/Devel/StackTrace/Frame.pm
+SHA1 078078c24eb8014c088a7715be3c2bb079e34e99 META.json
+SHA1 af2ceed45a88b907ae0ab738230366b5d5c9bb60 META.yml
+SHA1 52272b4ab9a0fa45d82dece9686856c677662809 Makefile.PL
+SHA1 9849c2cffe01d0353dc307be8ef790da0fd3dc20 README
+SHA1 391358751d2e5b41d3d673c88de17877c2ffa674 dist.ini
+SHA1 cab42c66d98f499dc56e73e056c68d148b283c7f lib/Devel/StackTrace.pm
+SHA1 48ffbdc6ee4496298f4373a44e5db0e9d522da82 lib/Devel/StackTrace/Frame.pm
 SHA1 1ef297d54ff84ea2b7e24e6e351c2107ffda2594 t/01-basic.t
-SHA1 9070c7a3d470b3648a017563c731b657ea8f0143 t/02-bad-utf8.t
+SHA1 5be358bf46458061956102b8885cee73e970c196 t/02-bad-utf8.t
 SHA1 afa39934e2b6e665cd2994663273af9a477e52b8 t/03-message.t
 SHA1 e3b74665df972492c41a5fc6ea193a8b863584d4 t/04-indent.t
 SHA1 bcd35584775b6d49e1ad7b5a8ad7abc9785d4629 t/05-back-compat.t
@@ -40,7 +40,7 @@ SHA1 72f0bea522bc8d101417864fcdacb537474f78bd t/release-pod.t
 -----BEGIN PGP SIGNATURE-----
 Version: GnuPG v1.4.10 (GNU/Linux)
 
-iEYEARECAAYFAky4ck0ACgkQIgMCsV8qvRJK/ACfR4Pyfzz3cpNJODdVqWb9BLqw
-Du8AmgJoZ9kwsjAGZlkRbbR4bruLvXup
-=5XUg
+iEYEARECAAYFAk0zP4oACgkQIgMCsV8qvRLdtQCdEdHQCNmdiSep4NkHcgWK+Dhk
+PgMAn1vv7g2uFSoMpGyVORpDzWYOOz7R
+=Hk9a
 -----END PGP SIGNATURE-----
