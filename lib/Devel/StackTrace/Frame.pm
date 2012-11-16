@@ -1,6 +1,6 @@
 package Devel::StackTrace::Frame;
-BEGIN {
-  $Devel::StackTrace::Frame::VERSION = '1.27';
+{
+  $Devel::StackTrace::Frame::VERSION = '1.28';
 }
 
 use strict;
@@ -58,6 +58,7 @@ sub args {
 sub as_string {
     my $self  = shift;
     my $first = shift;
+    my $p     = shift;
 
     my $sub = $self->subroutine;
 
@@ -106,9 +107,14 @@ sub as_string {
                 local $@;
 
                 eval {
-                    if ( $self->{max_arg_length}
-                        && length $_ > $self->{max_arg_length} ) {
-                        substr( $_, $self->{max_arg_length} ) = '...';
+                    my $max_arg_length
+                        = exists $p->{max_arg_length}
+                        ? $p->{max_arg_length}
+                        : $self->{max_arg_length};
+
+                    if ( $max_arg_length
+                        && length $_ > $max_arg_length ) {
+                        substr( $_, $max_arg_length ) = '...';
                     }
 
                     s/'/\\'/g;
@@ -142,7 +148,7 @@ sub as_string {
 
 # ABSTRACT: A single frame in a stack trace
 
-
+__END__
 
 =pod
 
@@ -152,7 +158,7 @@ Devel::StackTrace::Frame - A single frame in a stack trace
 
 =head1 VERSION
 
-version 1.27
+version 1.28
 
 =head1 DESCRIPTION
 
@@ -209,7 +215,3 @@ This is free software, licensed under:
   The Artistic License 2.0 (GPL Compatible)
 
 =cut
-
-
-__END__
-

@@ -1,3 +1,12 @@
+1.28   2012-11-16
+
+- Allow arguments to a trace's as_string method, specifically max_arg_length
+  Patch by Ricardo Signes.
+
+- Added a no_args option to the constructor in 1.26 but forgot to mention it
+  in Changes. Requested by Scott J. Miller. RT #71482.
+
+
 1.27  2011-01-16
 
 - Skip some tests on 5.13.8+ that are no longer relevant because of a change
@@ -248,7 +257,7 @@
 - Doc tweaks.
 
 
-0.85
+0.85  2000-09-02
 
 - doc bug fix that made it seem like args method was only available
   under Perl 5.6.0
@@ -256,14 +265,14 @@
 - converted objects from pseudo-hashes to regular hashes.
 
 
-0.8
+0.8   2000-09-02
 
 - Should work under Perl 5.6.0+.
 
 - Added hints & bitmask methods for use under Perl 5.6.0.
 
 
-0.75
+0.75  2000-06-29
 
 - Added frames method (and docs for it).
 
@@ -271,3 +280,7 @@
 
 - DOCS: explanation of 'top' and 'bottom' as they refer to the stack.
 
+
+0.7   2000-06-27
+
+- First release (I think)

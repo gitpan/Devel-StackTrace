@@ -1,6 +1,6 @@
 package Devel::StackTrace;
-BEGIN {
-  $Devel::StackTrace::VERSION = '1.27';
+{
+  $Devel::StackTrace::VERSION = '1.28';
 }
 
 use 5.006;
@@ -44,16 +44,28 @@ sub _record_caller_data {
     my $x = 1;
     while (
         my @c
-        = do { package # the newline keeps dzil from adding a version here
-                   DB; @DB::args = (); caller( $x++ ) }
+        = $self->{no_args}
+        ? caller( $x++ )
+        : do {
+            package    # the newline keeps dzil from adding a version here
+                DB;
+            @DB::args = ();
+            caller( $x++ );
+        }
         ) {
-        my @args = @DB::args;
 
-        if ( $self->{no_refs} ) {
-            @args = map { ref $_ ? $self->_ref_to_string($_) : $_ } @args;
+        my @args;
+
+        unless ( $self->{no_args} ) {
+            @args = @DB::args;
+
+            if ( $self->{no_refs} ) {
+                @args = map { ref $_ ? $self->_ref_to_string($_) : $_ } @args;
+            }
         }
 
-        push @{ $self->{raw} }, {
+        push @{ $self->{raw} },
+            {
             caller => \@c,
             args   => \@args,
             };
@@ -90,7 +102,7 @@ sub _make_frames {
     }
 }
 
-my $default_filter = sub {1};
+my $default_filter = sub { 1 };
 
 sub _make_frame_filter {
     my $self = shift;
@@ -98,7 +110,7 @@ sub _make_frame_filter {
     my ( @i_pack_re, %i_class );
     if ( $self->{ignore_package} ) {
         $self->{ignore_package} = [ $self->{ignore_package} ]
-            unless UNIVERSAL::isa( $self->{ignore_package}, 'ARRAY' );
+            unless eval { @{ $self->{ignore_package} } };
 
         @i_pack_re
             = map { ref $_ ? $_ : qr/^\Q$_\E$/ } @{ $self->{ignore_package} };
@@ -130,18 +142,15 @@ sub _make_frame_filter {
 sub _add_frame {
     my $self = shift;
     my $c    = shift;
-    my $args = shift;
+    my $p    = shift;
 
     # eval and is_require are only returned when applicable under 5.00503.
     push @$c, ( undef, undef ) if scalar @$c == 6;
 
-    if ( $self->{no_refs} ) {
-    }
-
     push @{ $self->{frames} },
         Devel::StackTrace::Frame->new(
         $c,
-        $args,
+        $p,
         $self->{respect_overload},
         $self->{max_arg_length},
         $self->{message},
@@ -213,11 +222,12 @@ sub frame_count {
 
 sub as_string {
     my $self = shift;
+    my $p    = shift;
 
     my $st    = '';
     my $first = 1;
     foreach my $f ( $self->frames() ) {
-        $st .= $f->as_string($first) . "\n";
+        $st .= $f->as_string( $first, $p ) . "\n";
         $first = 0;
     }
 
@@ -235,7 +245,7 @@ sub as_string {
 
 # ABSTRACT: An object representing a stack trace
 
-
+__END__
 
 =pod
 
@@ -245,7 +255,7 @@ Devel::StackTrace - An object representing a stack trace
 
 =head1 VERSION
 
-version 1.27
+version 1.28
 
 =head1 SYNOPSIS
 
@@ -350,6 +360,11 @@ your objects go out of scope.
 Devel::StackTrace replaces any references with their stringified
 representation.
 
+=item * no_args => $boolean
+
+If this parameter is true, then Devel::StackTrace will not store caller
+arguments in stack trace frames at all.
+
 =item * respect_overload => $boolean
 
 By default, Devel::StackTrace will call C<overload::AddrRef()> to get
@@ -360,8 +375,8 @@ traces, then set this parameter to true.
 
 =item * max_arg_length => $integer
 
-By default, Devel::StackTrace will display the entire argument for
-each subroutine call. Setting this parameter causes it to truncate the
+By default, Devel::StackTrace will display the entire argument for each
+subroutine call. Setting this parameter causes truncates each subroutine
 argument's string representation if it is longer than this number of
 characters.
 
@@ -415,10 +430,14 @@ first frame is 0 and negative indexes are allowed.
 
 Returns the number of frames in the trace object.
 
-=item * $trace->as_string
+=item * $trace->as_string(\%p)
 
 Calls as_string on each frame from top to bottom, producing output
 quite similar to the Carp module's cluck/confess methods.
+
+The optional C<\%p> parameter only has one useful option. The
+C<max_arg_length> parameter truncates each subroutine argument's string
+representation if it is longer than this number of characters.
 
 =back
 
@@ -441,7 +460,3 @@ This is free software, licensed under:
   The Artistic License 2.0 (GPL Compatible)
 
 =cut
-
-
-__END__
-

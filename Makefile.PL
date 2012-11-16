@@ -2,32 +2,37 @@
 use strict;
 use warnings;
 
+use 5.006;
 
-
-use ExtUtils::MakeMaker 6.31;
+use ExtUtils::MakeMaker 6.30;
 
 
 
 my %WriteMakefileArgs = (
-  'ABSTRACT' => 'An object representing a stack trace',
-  'AUTHOR' => 'Dave Rolsky <autarch@urth.org>',
-  'BUILD_REQUIRES' => {
-    'Test::More' => '0.88'
+  "ABSTRACT" => "An object representing a stack trace",
+  "AUTHOR" => "Dave Rolsky <autarch\@urth.org>",
+  "BUILD_REQUIRES" => {
+    "Test::More" => "0.88",
+    "base" => 0,
+    "bytes" => 0
   },
-  'CONFIGURE_REQUIRES' => {
-    'ExtUtils::MakeMaker' => '6.31'
+  "CONFIGURE_REQUIRES" => {
+    "ExtUtils::MakeMaker" => "6.30"
   },
-  'DISTNAME' => 'Devel-StackTrace',
-  'EXE_FILES' => [],
-  'LICENSE' => 'artistic_2',
-  'NAME' => 'Devel::StackTrace',
-  'PREREQ_PM' => {
-    'File::Spec' => '0',
-    'Scalar::Util' => '0'
+  "DISTNAME" => "Devel-StackTrace",
+  "EXE_FILES" => [],
+  "LICENSE" => "artistic_2",
+  "NAME" => "Devel::StackTrace",
+  "PREREQ_PM" => {
+    "File::Spec" => 0,
+    "Scalar::Util" => 0,
+    "overload" => 0,
+    "strict" => 0,
+    "warnings" => 0
   },
-  'VERSION' => '1.27',
-  'test' => {
-    'TESTS' => 't/*.t'
+  "VERSION" => "1.28",
+  "test" => {
+    "TESTS" => "t/*.t"
   }
 );
 
