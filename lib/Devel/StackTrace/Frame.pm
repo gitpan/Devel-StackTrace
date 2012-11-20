@@ -1,6 +1,6 @@
 package Devel::StackTrace::Frame;
 {
-  $Devel::StackTrace::Frame::VERSION = '1.29';
+  $Devel::StackTrace::Frame::VERSION = '1.30';
 }
 
 use strict;
@@ -158,7 +158,7 @@ Devel::StackTrace::Frame - A single frame in a stack trace
 
 =head1 VERSION
 
-version 1.29
+version 1.30
 
 =head1 DESCRIPTION
 
@@ -208,7 +208,7 @@ Dave Rolsky <autarch@urth.org>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is Copyright (c) 2011 by Dave Rolsky.
+This software is Copyright (c) 2012 by Dave Rolsky.
 
 This is free software, licensed under:
 

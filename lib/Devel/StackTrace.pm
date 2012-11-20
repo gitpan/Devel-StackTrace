@@ -1,6 +1,6 @@
 package Devel::StackTrace;
 {
-  $Devel::StackTrace::VERSION = '1.29';
+  $Devel::StackTrace::VERSION = '1.30';
 }
 
 use 5.006;
@@ -109,6 +109,9 @@ sub _make_frame_filter {
 
     my ( @i_pack_re, %i_class );
     if ( $self->{ignore_package} ) {
+        local $@;
+        local $SIG{__DIE__};
+
         $self->{ignore_package} = [ $self->{ignore_package} ]
             unless eval { @{ $self->{ignore_package} } };
 
@@ -264,7 +267,7 @@ Devel::StackTrace - An object representing a stack trace
 
 =head1 VERSION
 
-version 1.29
+version 1.30
 
 =head1 SYNOPSIS
 
@@ -471,7 +474,7 @@ Dave Rolsky <autarch@urth.org>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is Copyright (c) 2011 by Dave Rolsky.
+This software is Copyright (c) 2012 by Dave Rolsky.
 
 This is free software, licensed under:
 
