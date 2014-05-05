@@ -2,7 +2,7 @@ NAME
     Devel::StackTrace - An object representing a stack trace
 
 VERSION
-    version 1.31
+    version 1.32
 
 SYNOPSIS
       use Devel::StackTrace;
@@ -75,6 +75,16 @@ METHODS
 
         The filter should return true if the frame should be included, or
         false if it should be skipped.
+
+    *   filter_frames_early => $boolean
+
+        If this parameter is true, "frame_filter" will be called as soon as
+        the stacktrace is created, and before refs are stringified (if
+        "no_refs" is true), rather than being filtered lazily when
+        Devel::StackTrace::Frame objects are first needed.
+
+        This is useful if you want to filter based on the frame's arguments
+        and want to be able to examine object properties, for example.
 
     *   ignore_package => $package_name OR \@package_names
 

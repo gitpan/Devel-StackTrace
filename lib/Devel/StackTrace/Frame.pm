@@ -1,9 +1,5 @@
 package Devel::StackTrace::Frame;
-$Devel::StackTrace::Frame::VERSION = '1.31';
-BEGIN {
-  $Devel::StackTrace::Frame::AUTHORITY = 'cpan:DROLSKY';
-}
-
+$Devel::StackTrace::Frame::VERSION = '1.32';
 use strict;
 use warnings;
 
@@ -159,7 +155,7 @@ Devel::StackTrace::Frame - A single frame in a stack trace
 
 =head1 VERSION
 
-version 1.31
+version 1.32
 
 =head1 DESCRIPTION
 
@@ -194,8 +190,8 @@ Returns undef if the frame was not part of a require.
 
 =head2 $frame->args()
 
-Returns the arguments passed to the frame.  Note that any arguments
-that are references are returned as references, not copies.
+Returns the arguments passed to the frame.  Note that any arguments that are
+references are returned as references, not copies.
 
 =head2 $frame->hints()
 
