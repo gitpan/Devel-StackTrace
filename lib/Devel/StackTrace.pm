@@ -1,5 +1,5 @@
 package Devel::StackTrace;
-$Devel::StackTrace::VERSION = '1.33';
+$Devel::StackTrace::VERSION = '1.34';
 use 5.006;
 
 use strict;
@@ -40,7 +40,7 @@ sub _record_caller_data {
     my $filter = $self->{filter_frames_early} && $self->_make_frame_filter();
 
     # We exclude this method by starting at least one frame back.
-    my $x = 1 + ( $self->{skip_frames} // 0 );
+    my $x = 1 + ( $self->{skip_frames} || 0 );
 
     while (
         my @c
@@ -268,7 +268,7 @@ Devel::StackTrace - An object representing a stack trace
 
 =head1 VERSION
 
-version 1.33
+version 1.34
 
 =head1 SYNOPSIS
 
