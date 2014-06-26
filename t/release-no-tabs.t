@@ -26,6 +26,7 @@ my @files = (
     't/06-dollar-at.t',
     't/07-no-args.t',
     't/08-filter-early.t',
+    't/09-skip-frames.t',
     't/author-pod-spell.t',
     't/release-cpan-changes.t',
     't/release-eol.t',

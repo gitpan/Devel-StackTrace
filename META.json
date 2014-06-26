@@ -62,11 +62,12 @@
          "web" : "http://git.urth.org/Devel-StackTrace.git"
       }
    },
-   "version" : "1.32",
+   "version" : "1.33",
    "x_authority" : "cpan:DROLSKY",
    "x_contributors" : [
       "Dagfinn Ilmari Mannsåker <ilmari@ilmari.org>",
       "David Cantrell <david@cantrell.org.uk>",
+      "Graham Knop <haarg@haarg.org>",
       "Ricardo Signes <rjbs@cpan.org>",
       "autarch <devnull@localhost>",
       "convert-repo <devnull@localhost>",

@@ -2,7 +2,7 @@ NAME
     Devel::StackTrace - An object representing a stack trace
 
 VERSION
-    version 1.32
+    version 1.33
 
 SYNOPSIS
       use Devel::StackTrace;
@@ -100,6 +100,13 @@ METHODS
         parameter, meaning that the Devel::StackTrace package is ALWAYS
         ignored. However, if you create a subclass of Devel::StackTrace it
         will not be ignored.
+
+    *   skip_frames => $integer
+
+        This will cause this number of stack frames to be excluded from top
+        of the stack trace. This prevents the frames from being captured at
+        all, and applies before the "frame_filter", "ignore_package", or
+        "ignore_class" options, even with "filter_frames_early".
 
     *   no_refs => $boolean
 
