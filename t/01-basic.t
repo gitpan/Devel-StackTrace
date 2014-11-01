@@ -150,7 +150,7 @@ EOF
     );
 }
 
-# Storing references
+# Not storing references
 {
     my $obj = RefTest->new;
 
@@ -165,10 +165,13 @@ EOF
         "Only one argument should have been passed in the call to trace()"
     );
 
-    isa_ok( $args[0], 'RefTest' );
+    like(
+        $args[0], qr/RefTest=HASH/,
+        "Actual object should be replaced by string 'RefTest=HASH'"
+    );
 }
 
-# Not storing references
+# Storing references
 {
     my $obj = RefTest2->new;
 
@@ -183,15 +186,12 @@ EOF
         "Only one argument should have been passed in the call to trace()"
     );
 
-    like(
-        $args[0], qr/RefTest2=HASH/,
-        "Actual object should be replaced by string 'RefTest2=HASH'"
-    );
+    isa_ok( $args[0], 'RefTest2' );
 }
 
-# Not storing references (deprecated interface)
+# Storing references (deprecated interface 1)
 {
-    my $obj = RefTest3->new;
+    my $obj = RefTestDep1->new;
 
     my $trace = $obj->{trace};
 
@@ -204,10 +204,7 @@ EOF
         "Only one argument should have been passed in the call to trace()"
     );
 
-    like(
-        $args[0], qr/RefTest3=HASH/,
-        "Actual object should be replaced by string 'RefTest3=HASH'"
-    );
+    isa_ok( $args[0], 'RefTestDep1' );
 }
 
 # No ref to Exception::Class::Base object without refs
@@ -309,14 +306,14 @@ if ( $Exception::Class::VERSION && $Exception::Class::VERSION >= 1.09 )
 
     my $trace_text = <<"EOF";
 Trace begun at $test_file_name line 1021
-main::max_arg_length('abcdefghij...') called at $test_file_name line 308
+main::max_arg_length('abcdefghij...') called at $test_file_name line 305
 EOF
 
     is( $trace->as_string, $trace_text, 'trace text' );
 
     my $trace_text_1 = <<"EOF";
 Trace begun at $test_file_name line 1021
-main::max_arg_length('abc...') called at $test_file_name line 308
+main::max_arg_length('abc...') called at $test_file_name line 305
 EOF
 
     is(
@@ -346,7 +343,7 @@ SKIP:
 
     ok(
         ( !grep { ref $_ } map { @{ $_->{args} } } @{ $trace->{raw} } ),
-        'raw data does not contain any references when no_refs is true'
+        'raw data does not contain any references when unsafe_ref_capture not set'
     );
 
     is(
@@ -418,7 +415,7 @@ sub baz {
 }
 
 sub quux {
-    Devel::StackTrace->new( no_refs => 1 );
+    Devel::StackTrace->new();
 }
 
 sub respect_overloading {
@@ -430,7 +427,7 @@ sub max_arg_length {
 }
 
 sub overload_no_stringify {
-    return Devel::StackTrace->new( no_refs => 1, respect_overload => 1 );
+    return Devel::StackTrace->new( respect_overload => 1 );
 }
 
 {
@@ -491,13 +488,13 @@ sub overload_no_stringify {
     }
 
     sub trace {
-        Devel::StackTrace->new( no_refs => 1 );
+        Devel::StackTrace->new( unsafe_ref_capture => 1 );
     }
 }
 
 {
     package    #hide
-        RefTest3;
+        RefTestDep1;
 
     sub new {
         my $self = bless {}, shift;
@@ -508,7 +505,7 @@ sub overload_no_stringify {
     }
 
     sub trace {
-        Devel::StackTrace->new( no_object_refs => 1 );
+        Devel::StackTrace->new( no_refs => 0 );
     }
 }
 
@@ -525,7 +522,7 @@ sub overload_no_stringify {
     }
 
     sub trace {
-        Devel::StackTrace->new( no_refs => 1 );
+        Devel::StackTrace->new();
     }
 }
 
